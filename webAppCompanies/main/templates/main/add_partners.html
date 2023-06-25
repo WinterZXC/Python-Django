@@ -1,0 +1,87 @@
+{% extends 'main/layout.html' %}
+{% block table %}
+<h1 xmlns="http://www.w3.org/1999/html">Add partners </h1>
+
+
+
+
+    <h2>Companie name: {{ companies.name }}</h2>
+    <h2>Companie registration number: {{ companies.reg_number }}</h2>
+    <h2>Registration date: {{ companies.date }}</h2>
+    <h2>Companie capital: {{ companies.capital }}€</h2>
+    <form action="" method="POST" id="form-container">
+         {% csrf_token %}
+
+    <H2>Information about partners</H2>
+        <input type="hidden" name="id" value="{{ companies.id }}" />
+        <input type="hidden" name="newCapital" id="newCapital" value="0" />
+        {{ capital_formset.management_form }}
+        {% for form in capital_formset %}
+        <div class="capital-form">
+        {{form.as_p}}
+
+        </div>
+        {% endfor %}
+        <button id="add-form" type="button">Add Another partner</button><br>
+
+
+    <input type="submit" value="Post" id="submit-button" disabled/>
+    </form>
+<script>
+        let capitalForm = document.querySelectorAll(".capital-form")
+        let container = document.querySelector("#form-container")
+        let addButton = document.querySelector("#add-form")
+        let totalForms = document.querySelector("#id_form-TOTAL_FORMS")
+        let totalSum = 0
+        let companieCopital = {{ companies.capital }}
+        let newCapitalValue = 0
+        let newCapital = document.getElementById("newCapital")
+        console.log(newCapital)
+
+
+        let formNum = capitalForm.length-1
+        addButton.addEventListener('click', addForm)
+
+        function valid(){
+
+        }
+
+
+        function updateCount(e){
+            if(e.oldvalue == ''){
+                value= parseInt(e.value)
+                totalSum=totalSum+value
+                newCapitalValue=totalSum+companieCopital
+                newCapital.value = newCapitalValue
+                document.getElementById("submit-button").disabled=false;
+            }else{
+                value = parseInt(e.value)
+                oldValue = parseInt(e.oldvalue)
+                totalSum=totalSum+value-oldValue
+                newCapitalValue=totalSum+companieCopital
+                newCapital.value = newCapitalValue
+                document.getElementById("submit-button").disabled=false;
+            }
+        }
+
+        function addForm(e){
+            e.preventDefault()
+
+            let newForm = capitalForm[0].cloneNode(true)
+            let formRegex = RegExp(`form-(\\d){1}-`,'g')
+
+            formNum++
+            newForm.innerHTML = newForm.innerHTML.replace(formRegex, `form-${formNum}-`)
+            container.insertBefore(newForm, addButton)
+
+            totalForms.setAttribute('value', `${formNum+1}`)
+
+
+
+
+
+
+
+        }
+    </script>
+{% endblock %}

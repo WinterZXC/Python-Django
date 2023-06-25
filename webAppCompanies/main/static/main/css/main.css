@@ -1,0 +1,23 @@
+body{
+    background: #212529;
+    color: white;
+}
+h1{
+    color: white;
+}
+h2{
+    color: white;
+}
+p{
+color: white;
+}
+li{
+color: white;
+}
+a{
+text-decoration: none;
+color: white;
+}
+a:hover{
+color: white;
+}

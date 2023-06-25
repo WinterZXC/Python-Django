@@ -1,0 +1,30 @@
+{% extends 'main/layout.html' %}
+
+{% block table %}
+<div>
+    <h1>About companie</h1>
+    <h2>Companie name: {{ companies.name }}</h2>
+    <h2>Companie registration number: {{ companies.reg_number }}</h2>
+    <h2>Registration date: {{ companies.date }}</h2>
+    <h2>Companie capital: {{ companies.capital }}€</h2>
+    <h2>Auctioneers list:</h2>
+
+    {% for element in capital %}
+        {% if companies.id == element.companies_id_id   %}
+            {% if element.physical_person  %}
+                <h2>Name: {{ element.user_id.name }} Surname: {{ element.user_id.surname }} Personal code: {{ element.user_id.personal_code }}<br></h2>
+            {% else %}
+                <h2>Name: {{ element.user_id.name }} Personal code: {{ element.user_id.personal_code }} Capital: {{ element.capital }}€ Founder: {{element.founder}}<br></h2>
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+
+
+
+</div>
+{% endblock %}
+
+
+
+
+

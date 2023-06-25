@@ -1,0 +1,96 @@
+{% extends 'main/layout.html' %}
+{% block table %}
+<h1 xmlns="http://www.w3.org/1999/html">Create a Companie </h1>
+    <form action="" method="POST" id="form-container">
+    {% csrf_token %}
+    <H2>Name:</H2><input type="text" name="name" minlength="3" maxlength="100" required/><br/>
+    <H2>Registration number:</H2><input type="text" name="regNumber" minlength="7" maxlength="7" required/><br/>
+    <H2>Date:</H2><input type="date" name="date" required/><br/>
+    <H2>Capital:</H2><input type="number" name="capital" min="2500" id="companie_capital" required/><br/>
+        {% for element in id %}
+        <input type="hidden" name="id" value="{{ element.id|add:'1' }}" />
+        {% endfor %}
+
+        {{ capital_formset.management_form }}
+        {% for form in capital_formset %}
+        <div class="capital-form">
+        {{form.as_p}}
+
+        </div>
+        {% endfor %}
+        <button id="add-form" type="button">Add Another partner</button><br>
+
+    <input type="submit" value="Post" id="submit-button" disabled/>
+    </form>
+<script>
+        let capitalForm = document.querySelectorAll(".capital-form")
+        let container = document.querySelector("#form-container")
+        let addButton = document.querySelector("#add-form")
+        let totalForms = document.querySelector("#id_form-TOTAL_FORMS")
+        let capital=0
+
+        let input = document.getElementById("companie_capital")
+        input.addEventListener('change', newValue);
+        function newValue(e){
+            capital= parseInt(e.target.value);
+            console.log(capital)
+            if(totalSum == capital){
+                    document.getElementById("submit-button").disabled=false;
+                }else{
+                    document.getElementById("submit-button").disabled=true;
+                }
+        }
+
+        let totalSum=0
+
+
+        let formNum = capitalForm.length-1
+        addButton.addEventListener('click', addForm)
+
+        function updateCount(e){
+            if(e.oldvalue == ''){
+                value= parseInt(e.value)
+                totalSum=totalSum+value
+                if(totalSum == capital){
+                    document.getElementById("submit-button").disabled=false;
+                }else{
+                    document.getElementById("submit-button").disabled=true;
+                }
+            }else{
+                value = parseInt(e.value)
+                oldValue = parseInt(e.oldvalue)
+                totalSum=totalSum+value-oldValue
+                if(totalSum == capital){
+                    document.getElementById("submit-button").disabled=false;
+                }else{
+                    document.getElementById("submit-button").disabled=true;
+                }
+            }
+            console.log(totalSum)
+        }
+
+
+
+
+        function addForm(e){
+            e.preventDefault()
+
+            let newForm = capitalForm[0].cloneNode(true)
+            let formRegex = RegExp(`form-(\\d){1}-`,'g')
+
+            formNum++
+            newForm.innerHTML = newForm.innerHTML.replace(formRegex, `form-${formNum}-`)
+            container.insertBefore(newForm, addButton)
+
+            totalForms.setAttribute('value', `${formNum+1}`)
+
+
+
+
+
+
+
+        }
+    </script>
+
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends 'main/layout.html' %}
+
+{% block table %}
+            <form style="float: left;" type="get" action="{% url 'search_companie' %}">
+
+            <input  id="search_companie" type="text" name="search_companie"  placeholder="Search Companie" required>
+            <button id="search_submit_companie" type="submit" >Search</button>
+        </form>
+
+        <form style="float: right;" type="get" action="{% url 'search_name' %}">
+
+            <input  id="search_name" type="text" name="search_name"  placeholder="Search Name" required>
+            <button id="search_submit_name" type="submit" >Search</button>
+        </form>
+
+        <table class="table table-striped table-dark">
+          <thead>
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col">Registration number</th>
+              <th scope="col">Date</th>
+              <th scope="col">Capital</th>
+                <th scope="col">Auctioneers name</th>
+                <th scope="col">Auctioneers capital</th>
+                <th scope="col">Add partner</th>
+            </tr>
+          </thead>
+            <tbody>
+
+            {% for el in companies %}
+
+            <tr>
+              <td><a href="{% url 'detail' el.id %}">{{ el.name }}</a></td>
+              <td>{{ el.reg_number }}</td>
+              <td>{{ el.date }}</td>
+                <td>{{ el.capital }}€</td>
+                <td>
+                {% for element in capital %}
+                    {% if el.id == element.companies_id_id   %}
+                        {{ element.user_id.name }} {{ element.user_id.surname }} <br>
+                    {% endif %}
+                {% endfor %}
+                </td>
+                <td>
+                {% for element in capital %}
+                    {% if el.id == element.companies_id_id   %}
+                        {{ element.capital }}€ <br>
+                    {% endif %}
+                {% endfor %}
+                </td>
+                <td>
+                    <a href="{% url 'add_capital' el.id %}" type="button" class="btn btn-warning">+</a></td>
+            </tr>
+
+            {% endfor %}
+
+          </tbody>
+</table>
+{% endblock %}
